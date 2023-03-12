@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors"); // Import the CORS middleware
 const {
   createUser,
   loginUserController,
@@ -15,7 +14,12 @@ const {
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
-router.use(cors()); // Use the CORS middleware for all routes
+router.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3001"); // Update with your client-side domain
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
+});
 
 router.post("/register", createUser);
 router.post("/login", loginUserController);
